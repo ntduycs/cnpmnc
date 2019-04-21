@@ -23,6 +23,8 @@ public class AdjacencyMatrix implements Observable {
 
     private TextField inputField = new TextField("Nhập số đỉnh đồ thị");
     private Button generateButton = new Button("Tạo mới");
+    private Button btnDijkstra = new Button("Dijkstra");
+    private Button btnEuler = new Button("Euler");
     private GridPane gridPane = new GridPane();
     private BorderPane root;
 

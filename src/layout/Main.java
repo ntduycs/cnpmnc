@@ -47,7 +47,6 @@ public class Main extends Application {
 
     private void initObserver() {
         this.matrixModule.attachObserver(graphModule);
-
     }
 
     public static void main(String[] args) {
