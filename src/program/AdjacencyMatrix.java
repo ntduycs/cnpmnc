@@ -1,21 +1,21 @@
 package program;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.StringProperty;
+import graph.internal.Graph;
+import graph.internal.GraphState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import observer.Observable;
+import observer.Observer;
 
-import java.util.List;
 import java.util.Random;
 
-public class AdjacencyMatrix {
+public class AdjacencyMatrix implements Observable {
     private TextField inputField = new TextField("Input here ...");
     private Button generateButton = new Button("Show");
 
@@ -23,16 +23,35 @@ public class AdjacencyMatrix {
 
     private GridPane gridPane = new GridPane();
 
-    public AdjacencyMatrix() {
+    public AdjacencyMatrix(Graph graph) {
         generateButton.setOnAction(e -> {
             int inputValue = Integer.parseInt(inputField.getText());
             generateAdjMatrix(inputValue);
+            initializeGraph(inputValue, graph);
         });
-        HBox button = new HBox(5, inputField,generateButton);
-        button.setPadding(new Insets(5));
-        button.setAlignment(Pos.CENTER);
+        HBox inputForm = new HBox(5, inputField,generateButton);
+        inputForm.setPadding(new Insets(5));
+        inputForm.setAlignment(Pos.CENTER);
         root = new BorderPane(gridPane);
-        root.setBottom(button);
+        root.setBottom(inputForm);
+    }
+
+    private void initializeGraph(int numVertices, Graph graph) {
+        GraphState graphState = graph.getModel();
+        graph.beginUpdate();
+        for (int i = 0; i < numVertices; i++) {
+            graphState.addDefaultNode(Integer.toString(i+1));
+        }
+        graphState.addEdge("1", "2", "15");
+        graph.endUpdate();
+    }
+
+    public void updateGraph(Graph graph) {
+        GraphState graphState = graph.getModel();
+        graph.beginUpdate();
+        // do something
+//        graphState.addEdge("1","2", "25");
+        graph.endUpdate();
     }
 
 
@@ -63,10 +82,12 @@ public class AdjacencyMatrix {
         }
     }
 
-
-
     public Node getView() {
         return root;
     }
 
+    @Override
+    public void notifyAllObservers() {
+
+    }
 }

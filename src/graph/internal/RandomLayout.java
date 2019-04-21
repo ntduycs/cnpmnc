@@ -6,14 +6,12 @@ import java.util.Random;
 
 public class RandomLayout extends Layout {
 
-    Graph graph;
+    private Graph graph;
 
-    Random rnd = new Random();
+    private Random rnd = new Random();
 
     public RandomLayout(Graph graph) {
-
         this.graph = graph;
-
     }
 
     public void execute() {

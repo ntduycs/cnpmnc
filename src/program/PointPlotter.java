@@ -1,16 +1,14 @@
 package program;
 
-import javafx.geometry.Insets;
-import javafx.scene.chart.ScatterChart;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import model.Point;
+import graph.internal.Graph;
 import javafx.application.Application;
-import javafx.scene.layout.HBox;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
+import model.Point;
 
 /**
  * Java FX application that plots points
@@ -24,9 +22,9 @@ public class PointPlotter extends Application {
     private PointTable tableModule;
 
     // Graph module
-    private PointGraph graphModule;
+    private Graph graphModule = new Graph();
 
-    private AdjacencyMatrix matrixModule = new AdjacencyMatrix();
+    private AdjacencyMatrix matrixModule = new AdjacencyMatrix(graphModule);
 
     // Must override this method for class that extends Application
     @Override
@@ -39,7 +37,7 @@ public class PointPlotter extends Application {
         data = FXCollections.observableArrayList();
 
         // Initialize instance of graph module
-        graphModule = new PointGraph(data);
+//        graphModule = new PointGraph(data);
 
         // Initialize instance of table module
         tableModule = new PointTable(data);

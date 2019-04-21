@@ -1,10 +1,12 @@
 package graph.internal;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import graph.internal.cell.Cell;
 import graph.internal.cell.CellLayer;
+import javafx.stage.Screen;
 
 public class Graph {
     private GraphState model;
@@ -13,14 +15,14 @@ public class Graph {
 
     private ZoomableScrollPane scrollPane;
 
-    MouseGestures mouseGestures;
+    private MouseGestures mouseGestures;
 
     /**
      * the pane wrapper is necessary or else the scrollpane would always align
      * the top-most and left-most child to the top and left eg when you drag the
      * top child down, the entire scrollpane would move down
      */
-    CellLayer cellLayer;
+    private CellLayer cellLayer;
 
     public Graph() {
 
@@ -35,10 +37,14 @@ public class Graph {
 
         scrollPane = new ZoomableScrollPane(canvas);
 
+        Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
+        scrollPane.setPrefViewportWidth(visualBounds.getWidth()/2);
+
         scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
 
     }
+
+    public ScrollPane getView() {return this.scrollPane;}
 
     public ScrollPane getScrollPane() {
         return this.scrollPane;
