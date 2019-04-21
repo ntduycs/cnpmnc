@@ -7,7 +7,17 @@ public interface Observable {
 
     List<Observer> lstObserver = new ArrayList<>();
 
-    void notifyAllObservers();
+    default void notifyAllObservers() {
+        for (Observer o: lstObserver) {
+            o.update(null);
+        }
+    }
+
+    default void notifyAllObservers(Object data) {
+        for (Observer o: lstObserver) {
+            o.update(data);
+        }
+    }
 
     default void attachObserver(Observer o) {
         lstObserver.add(o);

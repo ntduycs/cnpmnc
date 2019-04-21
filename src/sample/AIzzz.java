@@ -1,6 +1,8 @@
 package com.thanhduybk.dijkstra;
 
-public class Main {
+import model.Node;
+
+public class AIzzz {
     public static void main(String[] args) {
         Node nodeA = new NodeDijkstra("A");
         Node nodeB = new NodeDijkstra("B");
