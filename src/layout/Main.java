@@ -7,11 +7,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.Graph;
 
 public class Main extends Application {
 
     // Graph module
     private GraphUI graphModule = new GraphUI();
+    private Graph graphData = new Graph();
 
     private AdjacencyMatrix matrixModule = new AdjacencyMatrix();
 
@@ -47,6 +49,7 @@ public class Main extends Application {
 
     private void initObserver() {
         this.matrixModule.attachObserver(graphModule);
+        this.matrixModule.attachObserver(graphData);
     }
 
     public static void main(String[] args) {

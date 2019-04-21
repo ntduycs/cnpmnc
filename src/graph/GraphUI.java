@@ -1,14 +1,10 @@
 package graph;
 
-import graph.internal.Edge;
 import graph.internal.GraphState;
 import graph.internal.RandomLayout;
 import javafx.util.Pair;
 import observer.Observer;
 import util.Triple;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GraphUI extends graph.internal.Graph implements Observer {
 
