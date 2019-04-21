@@ -1,17 +1,19 @@
 package model;
 
 import javafx.util.Pair;
+import layout.UserGUIController;
+import observer.Observable;
 import observer.Observer;
+import util.BundleDijkstra;
 import util.Triple;
+import visitor.DijkstraVisitor;
 import visitor.GraphVisitor;
 import visitor.VisitableGraph;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
-public class Graph implements VisitableGraph, Observer {
+public class Graph extends Observable implements VisitableGraph, Observer {
+
     private Set<Node> nodes = new HashSet<>();
 
     public void addNode(Node node) {
@@ -36,7 +38,7 @@ public class Graph implements VisitableGraph, Observer {
         graphVisitor.visit(this, sourceId);
     }
 
-    public  Node getNodeByName(Integer name) {
+    public Node getNodeByName(Integer name) {
         Node node = null;
         Iterator<Node> iterator = nodes.iterator();
         while (iterator.hasNext()) {
@@ -48,16 +50,13 @@ public class Graph implements VisitableGraph, Observer {
     }
 
     public void printGraph() {
-        for (Node node :
-                nodes) {
-            System.out.print("This is node: ");
-            System.out.println(node.getName());
-            System.out.print("This is adjacent list: ");
-            for (Node adjNode :
-                    node.getAdjacentNodes().keySet()) {
+        for (Node node : nodes) {
+            System.out.println("Node: " + node.getName());
+            System.out.println("Adj nodes:");
+            for (Node adjNode : node.getAdjacentNodes().keySet()) {
                 System.out.print(adjNode.getName() + "\t");
             }
-            System.out.println("\n=========");
+            System.out.println("===========================");
         }
     }
 
@@ -66,8 +65,9 @@ public class Graph implements VisitableGraph, Observer {
         // User inputs the number of vertices
         if (data instanceof Integer) {
             int numVertices = (int) data;
-            for (int i = 0; i< numVertices; i++) {
-                nodes.add(new Node(i+1));
+            nodes.clear();
+            for (int i = 0; i < numVertices; i++) {
+                nodes.add(new Node(i + 1));
             }
 
         } else if (data instanceof Triple) {
@@ -86,6 +86,46 @@ public class Graph implements VisitableGraph, Observer {
             Node srcNode = getNodeByName(src);
             Node destNode = getNodeByName(dest);
             srcNode.removeAdjacentNode(destNode);
+
+        } else if (data instanceof BundleDijkstra) {
+            BundleDijkstra dt = (BundleDijkstra) data;
+
+            if (dt.type.equals(BundleDijkstra.TYPE_EXECUTE)) {
+                runDijkstra(dt.sourceId, dt.endId);
+
+            } else if (dt.type.equals(BundleDijkstra.TYPE_RESULT)) {
+
+            }
+
+        } else if (data instanceof String) {
+            if (((String) data).equalsIgnoreCase(UserGUIController.NOTIFY_RUN_EULER)) {
+                this.runEuler();
+            }
+
         }
+    }
+
+    void runDijkstra(String sourceId, String endId) {
+        DijkstraVisitor visitor = new DijkstraVisitor();
+        visitor.visit(this, sourceId);
+
+        HashMap<Node, Integer> result = visitor.getDistanceTo();
+        HashMap<Node, Node> tracingPath = visitor.getTracingPath();
+
+        for (Node node : nodes) {
+            System.out.println("Node: " + node.getName() + " - Distance: " + result.get(node));
+            Node u = node;
+            while (u != null) {
+                System.out.print(u.getName() + " <- ");
+                u = tracingPath.getOrDefault(u, null);
+            }
+            System.out.println("X");
+        }
+
+        this.notifyAllObservers(new BundleDijkstra(BundleDijkstra.TYPE_RESULT, sourceId, endId, this, result, tracingPath));
+    }
+
+    void runEuler() {
+
     }
 }

@@ -8,14 +8,15 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Graph;
+import observer.Observer;
 
 public class Main extends Application {
 
     // Graph module
-    private GraphUI graphModule = new GraphUI();
+    private GraphUI graphUI = new GraphUI();
     private Graph graphData = new Graph();
 
-    private AdjacencyMatrix matrixModule = new AdjacencyMatrix();
+    private UserGUIController guiController = new UserGUIController();
 
     // Must override this method for class that extends Application
     @Override
@@ -28,13 +29,13 @@ public class Main extends Application {
 
         // Add modules to root
         root.getChildren().addAll(
-                graphModule.getView(),
-                matrixModule.getView()
+                graphUI.getView(),
+                guiController.getView()
         );
 
         // Container associated with root node
         Rectangle2D ourScreen = Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(root, ourScreen.getWidth() * 0.8, ourScreen.getHeight() * 0.8);
+        Scene scene = new Scene(root, ourScreen.getWidth() * 0.9, ourScreen.getHeight() * 0.9);
 
         // Set the scene for the stage
         stage.setScene(scene);
@@ -48,8 +49,10 @@ public class Main extends Application {
     }
 
     private void initObserver() {
-        this.matrixModule.attachObserver(graphModule);
-        this.matrixModule.attachObserver(graphData);
+        this.guiController.attachObserver(graphUI);
+        this.guiController.attachObserver(graphData);
+
+        this.graphData.attachObserver(graphUI);
     }
 
     public static void main(String[] args) {

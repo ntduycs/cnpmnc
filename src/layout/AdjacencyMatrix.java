@@ -1,23 +1,19 @@
 package layout;
 
-import graph.internal.Graph;
-import graph.internal.GraphState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import observer.Observable;
-import observer.Observer;
 import util.Triple;
-import visitor.DijkstraVisitor;
 
-import java.util.Random;
-
-public class AdjacencyMatrix implements Observable {
+public class AdjacencyMatrix extends Observable {
 
     private TextField inputField = new TextField("Nhập số đỉnh đồ thị");
     private TextField startVertex = new TextField("Nhập đỉnh bắt đầu");

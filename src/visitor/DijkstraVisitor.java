@@ -3,7 +3,8 @@ package visitor;
 import model.Graph;
 import model.Node;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class DijkstraVisitor implements GraphVisitor {
 
@@ -13,6 +14,7 @@ public class DijkstraVisitor implements GraphVisitor {
     Node sourceNode;
 
     HashMap<Node,Integer> distanceTo = new HashMap<>();
+    HashMap<Node,Node> tracingPath = new HashMap<>();
     PriorityQueue<Data> priorityQueue;
 
 
@@ -55,6 +57,7 @@ public class DijkstraVisitor implements GraphVisitor {
                 int d = u.getAdjacentNodes().get(v);
                 if (distanceTo.get(v) == INF || distanceTo.get(v) > top.distance + d) {
                     distanceTo.put(v, top.distance + d);
+                    tracingPath.put(v, u);
                     priorityQueue.add(new Data(v, distanceTo.get(v)));
                 }
             }
@@ -69,6 +72,9 @@ public class DijkstraVisitor implements GraphVisitor {
         return distanceTo;
     }
 
+    public HashMap<Node, Node> getTracingPath() {
+        return tracingPath;
+    }
 
     class Data implements Comparable<Data> {
 

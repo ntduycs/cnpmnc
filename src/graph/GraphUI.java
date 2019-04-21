@@ -1,18 +1,28 @@
 package graph;
 
+import graph.internal.Edge;
+import graph.internal.Graph;
 import graph.internal.GraphState;
 import graph.internal.RandomLayout;
 import javafx.util.Pair;
+import layout.UserGUIController;
+import model.Node;
 import observer.Observer;
+import util.BundleDijkstra;
 import util.Triple;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GraphUI extends graph.internal.Graph implements Observer {
 
     private void initializeGraph(int numVertices) {
+        clear();
+
         GraphState graphState = getModel();
         beginUpdate();
         for (int i = 0; i < numVertices; i++) {
-            graphState.addDefaultNode(Integer.toString(i+1));
+            graphState.addDefaultNode(Integer.toString(i + 1));
         }
         endUpdate();
 
@@ -27,8 +37,8 @@ public class GraphUI extends graph.internal.Graph implements Observer {
         GraphState graphState = getModel();
         beginUpdate();
 
-        graphState.removeEdge(src+"", dest+"");
-        graphState.addEdge(src+"", dest+"", distance+"");
+        graphState.removeEdge(src + "", dest + "");
+        graphState.addEdge(src + "", dest + "", distance + "");
 
         endUpdate();
     }
@@ -37,7 +47,7 @@ public class GraphUI extends graph.internal.Graph implements Observer {
         GraphState graphState = getModel();
         beginUpdate();
 
-        graphState.removeEdge(src+"", dest+"");
+        graphState.removeEdge(src + "", dest + "");
 
         endUpdate();
     }
@@ -61,6 +71,72 @@ public class GraphUI extends graph.internal.Graph implements Observer {
             int src = d.getKey();
             int dest = d.getValue();
             removeEdge(src, dest);
+
+        } else if (data instanceof BundleDijkstra) {
+            BundleDijkstra dt = (BundleDijkstra) data;
+
+            if (dt.type.equals(BundleDijkstra.TYPE_EXECUTE)) {
+
+            } else if (dt.type.equals(BundleDijkstra.TYPE_RESULT)) {
+                renderResultDijkstra(dt);
+            }
+
+        } else if (data instanceof String) {
+            if (((String) data).equalsIgnoreCase(UserGUIController.NOTIFY_RUN_EULER)) {
+
+            }
+
         }
+    }
+
+    void renderResultDijkstra(BundleDijkstra result) {
+        model.Graph graph = result.graph;
+        Node sourceNode = findNodeById(result.sourceId, graph);
+        Node endNode = findNodeById(result.endId, graph);
+        if (sourceNode == null || endNode == null) {
+            // TODO
+            return;
+        }
+        List<Edge> highlightEdges = new ArrayList<>();
+        while (endNode != sourceNode) {
+            Node prevNode = result.tracingPath.getOrDefault(endNode, null);
+            if (prevNode == null) {
+                // TODO
+                System.out.println("Previous node is null");
+                break;
+            } else {
+                Edge e = findEdgeBy2Point(prevNode.getName().toString(), endNode.getName().toString());
+                if (e == null) {
+                    // TODO
+                    System.out.println("Edge is null");
+                    break;
+                } else {
+                    highlightEdges.add(e);
+                }
+                endNode = prevNode;
+            }
+        }
+        beginUpdate();
+        getModel().resetColorEdges();
+        getModel().highlightEdges(highlightEdges);
+        endUpdate();
+    }
+
+    Edge findEdgeBy2Point(String srcId, String destId) {
+        for (Edge e: getModel().getAllEdges()) {
+            if (e.getSource().getCellId().equals(srcId) && e.getTarget().getCellId().equals(destId)) {
+                return  e;
+            }
+        }
+        return null;
+    }
+
+    Node findNodeById(String id, model.Graph graph) {
+        for (Node u: graph.getNodes()) {
+            if (u.getName().toString().equals(id)) {
+                return u;
+            }
+        }
+        return null;
     }
 }
