@@ -63,4 +63,11 @@ public class Node {
     public void setDistanceToSource(Integer distanceToSource) {
         this.distanceToSource = distanceToSource;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "name=" + name +
+                '}';
+    }
 }
