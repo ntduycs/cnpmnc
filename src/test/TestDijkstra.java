@@ -1,18 +1,21 @@
-package sample;
+package test;
 
 import model.Graph;
 import model.Node;
-import util.Dijkstra;
+import visitor.DijkstraVisitor;
 
-public class AIzzz {
+import java.util.HashMap;
+
+public class TestDijkstra {
+
     public static void main(String[] args) {
 
-        Node nodeA = new Node("A");
-        Node nodeB = new Node("B");
-        Node nodeC = new Node("C");
-        Node nodeD = new Node("D");
-        Node nodeE = new Node("E");
-        Node nodeF = new Node("F");
+        Node nodeA = new Node("1");
+        Node nodeB = new Node("2");
+        Node nodeC = new Node("3");
+        Node nodeD = new Node("4");
+        Node nodeE = new Node("5");
+        Node nodeF = new Node("6");
 
         nodeA.addAdjacentNode(nodeB, 10);
         nodeA.addAdjacentNode(nodeC, 15);
@@ -38,9 +41,15 @@ public class AIzzz {
 
         graph = Dijkstra.calculateShortestPathFromSource(graph, nodeA);
 
-        for (Node node: graph.getNodes()) {
-            System.out.println("\nShortest path from nodeA to node" + node.getName() + " is " + node.getDistanceToSource());
+        DijkstraVisitor visitor = new DijkstraVisitor();
+        visitor.visit(graph, nodeA.getName().toString());
+
+        HashMap<Node,Integer> result = visitor.getDistanceTo();
+
+        for (Node node: result.keySet()) {
+            System.out.println(node.getName() + " " + result.get(node));
         }
 
     }
+
 }
