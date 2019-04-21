@@ -1,7 +1,8 @@
 package visitor;
 
-public interface Visitable {
+public interface VisitableGraph {
 
-    public void accept()
+    void accept(GraphVisitor graphVisitor);
+    void accept(GraphVisitor graphVisitor, String sourceId);
 
 }
