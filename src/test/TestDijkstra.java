@@ -39,8 +39,6 @@ public class TestDijkstra {
         graph.addNode(nodeE);
         graph.addNode(nodeF);
 
-        graph = Dijkstra.calculateShortestPathFromSource(graph, nodeA);
-
         DijkstraVisitor visitor = new DijkstraVisitor();
         visitor.visit(graph, nodeA.getName().toString());
 
