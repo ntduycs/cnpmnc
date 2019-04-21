@@ -1,5 +1,9 @@
 package program;
 
+import javafx.geometry.Insets;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import model.Point;
 import javafx.application.Application;
 import javafx.scene.layout.HBox;
@@ -22,6 +26,8 @@ public class PointPlotter extends Application {
     // Graph module
     private PointGraph graphModule;
 
+    private AdjacencyMatrix matrixModule = new AdjacencyMatrix();
+
     // Must override this method for class that extends Application
     @Override
     public void start(Stage stage) {
@@ -39,7 +45,7 @@ public class PointPlotter extends Application {
         tableModule = new PointTable(data);
 
         // Add modules to root
-        root.getChildren().addAll(graphModule.getView(), tableModule.getView());
+        root.getChildren().addAll(graphModule.getView(), matrixModule.getView());
 
         // Container associated with root node
         Scene scene = new Scene(root);
