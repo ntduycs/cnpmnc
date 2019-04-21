@@ -17,6 +17,19 @@ public class Node {
     }
 
     public Node() {
+
+    }
+
+    public Node(Integer name) {
+        this.name = name;
+    }
+
+    public Node(String a) {
+        this.name = Integer.valueOf(a);
+    }
+
+    public void addAdjacentNode(Node node, Integer weight) {
+        this.adjacentNodes.put(node, weight);
     }
 
     public Integer getName() {
