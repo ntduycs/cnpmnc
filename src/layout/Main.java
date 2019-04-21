@@ -45,9 +45,6 @@ public class Main extends Application {
 
         // Show the window
         stage.show();
-
-        Layout layout = new RandomLayout(graphModule);
-        layout.execute();
     }
 
     public static void main(String[] args) {

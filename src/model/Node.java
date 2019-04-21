@@ -11,6 +11,14 @@ public class Node {
     private List<Node> shortestPath = new LinkedList<>();
     private Integer distanceToSource = Integer.MAX_VALUE;
 
+    public Node(Integer name) {
+        this.name = name;
+    }
+
+    public void addAdjacentNode(Node node, Integer weight) {
+        this.adjacentNodes.put(node, weight);
+    }
+
     public Integer getName() {
         return name;
     }

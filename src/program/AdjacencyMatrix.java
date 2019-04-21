@@ -2,6 +2,8 @@ package program;
 
 import graph.internal.Graph;
 import graph.internal.GraphState;
+import graph.internal.Layout;
+import graph.internal.RandomLayout;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -11,7 +13,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import observer.Observable;
-import observer.Observer;
 
 import java.util.Random;
 
@@ -44,6 +45,8 @@ public class AdjacencyMatrix implements Observable {
         }
         graphState.addEdge("1", "2", "15");
         graph.endUpdate();
+        Layout layout = new RandomLayout(graph);
+        layout.execute();
     }
 
     public void updateGraph(Graph graph) {
@@ -72,7 +75,6 @@ public class AdjacencyMatrix implements Observable {
                 tf.setAlignment(Pos.CENTER);
                 tf.setEditable(true);
                 tf.setText(Integer.toString(rand1));
-                System.out.println(tf.getText());
 
                 // Iterate the Index using the loops
                 GridPane.setRowIndex(tf,y);
