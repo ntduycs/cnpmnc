@@ -104,7 +104,13 @@ public class UserGUIController implements Observable {
         tf.textProperty().addListener(observable -> {
             try {
                 int distance = Integer.valueOf(tf.getText());
-                notifyAllObservers(new Triple<>(row, col, distance));
+                if (distance < 0) {
+                    // remove edge
+                    notifyAllObservers(new Pair<>(row, col));
+                } else {
+                    // add or update edge
+                    notifyAllObservers(new Triple<>(row, col, distance));
+                }
 
             } catch (NumberFormatException e) {
                 notifyAllObservers(new Pair<>(row, col));

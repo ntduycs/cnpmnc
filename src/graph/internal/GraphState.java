@@ -9,17 +9,19 @@ import java.util.Map;
 
 public class GraphState {
 
-    Cell graphParent;
+    private Cell graphParent;
 
-    List<Cell> allCells;
-    List<Cell> addedCells;
-    List<Cell> removedCells;
+    private List<Cell> allCells;
+    private List<Cell> addedCells;
+    private List<Cell> removedCells;
 
-    List<Edge> allEdges;
-    List<Edge> addedEdges;
-    List<Edge> removedEdges;
+    private List<Edge> allEdges;
+    private List<Edge> addedEdges;
+    private List<Edge> removedEdges;
+    private List<Edge> highlightEdges;
 
-    Map<String, Cell> cellMap; // <id,cell>
+    private Map<String, Cell> cellMap; // <id,cell>
+
 
     public GraphState() {
 
@@ -38,6 +40,7 @@ public class GraphState {
         allEdges = new ArrayList<>();
         addedEdges = new ArrayList<>();
         removedEdges = new ArrayList<>();
+        highlightEdges = new ArrayList<>();
 
         cellMap = new HashMap<>(); // <id,cell>
 
@@ -66,6 +69,14 @@ public class GraphState {
 
     public List<Edge> getRemovedEdges() {
         return removedEdges;
+    }
+
+    public List<Edge> getHighlightEdges() {
+        return highlightEdges;
+    }
+
+    public void setHighlightEdges(List<Edge> highlightEdges) {
+        this.highlightEdges = highlightEdges;
     }
 
     public List<Edge> getAllEdges() {
@@ -123,6 +134,14 @@ public class GraphState {
         if (e != null) {
             removedEdges.add(e);
         }
+    }
+
+    public void highlightEdges(List<Edge> edges) {
+        this.highlightEdges.addAll(edges);
+    }
+
+    public void resetColorEdges() {
+        this.highlightEdges.clear();
     }
 
     /**

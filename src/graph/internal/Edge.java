@@ -3,19 +3,20 @@ package graph.internal;
 import javafx.beans.InvalidationListener;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import graph.internal.cell.Cell;
 
 public class Edge extends Group {
 
-    protected Cell source;
-    protected Cell target;
-    protected String labelText;
+    private Cell source;
+    private Cell target;
+    private String labelText;
 
-    Line line, arrow1, arrow2;
-    Label label;
+    private Line line, arrow1, arrow2;
+    private Label label;
 
-    private static final double arrowLength = 30;
+    private static final double arrowLength = 20;
     private static final double arrowWidth = 10;
 
     public Edge(Cell source, Cell target) {
@@ -35,7 +36,7 @@ public class Edge extends Group {
         getChildren().addAll(line, arrow1, arrow2, label);
     }
 
-    protected void initLine(Cell source, Cell target) {
+    private void initLine(Cell source, Cell target) {
         this.source = source;
         this.target = target;
 
@@ -44,20 +45,23 @@ public class Edge extends Group {
 
         line = new Line();
 
-        line.startXProperty().bind( source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 2.0));
-        line.startYProperty().bind( source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 2.0));
+        line.startXProperty().bind(source.layoutXProperty().add(source.getBoundsInParent().getWidth() / 2.0));
+        line.startYProperty().bind(source.layoutYProperty().add(source.getBoundsInParent().getHeight() / 2.0));
 
-        line.endXProperty().bind( target.layoutXProperty().add( target.getBoundsInParent().getWidth() / 2.0));
-        line.endYProperty().bind( target.layoutYProperty().add( target.getBoundsInParent().getHeight() / 2.0));
+        line.endXProperty().bind(target.layoutXProperty().add(target.getBoundsInParent().getWidth() / 2.0));
+        line.endYProperty().bind(target.layoutYProperty().add(target.getBoundsInParent().getHeight() / 2.0));
 
         initDirect();
+
+        resetColor();
     }
 
-    protected void initDirect() {
+    private void initDirect() {
         arrow1 = new Line();
         arrow2 = new Line();
 
         InvalidationListener updater = o -> {
+
             double ex = line.getEndX();
             double ey = line.getEndY();
             double sx = line.getStartX();
@@ -69,14 +73,29 @@ public class Edge extends Group {
             arrow2.setEndY(ey);
 
             if (ex == sx && ey == sy) {
-                // arrow parts of length 0
+                // length = 0
                 arrow1.setStartX(ex);
                 arrow1.setStartY(ey);
                 arrow2.setStartX(ex);
                 arrow2.setStartY(ey);
+
             } else {
-                double factor = arrowLength / Math.hypot(sx - ex, sy - ey);
-                double factorO = arrowWidth / Math.hypot(sx - ex, sy - ey);
+
+                double wx = target.getBoundsInParent().getWidth() / 2;
+                double wy = target.getBoundsInParent().getHeight() / 2;
+
+                double lenLine = Math.hypot(sx - ex, sy - ey);
+
+                double etx = ex, ety = ey;
+                ex += (sx - ex) * (wx / lenLine);
+                ey += (sy - ey) * (wy / lenLine);
+                sx += etx - ex;
+                sy += ety - ey;
+
+                lenLine = Math.hypot(sx - ex, sy - ey);
+
+                double factor = arrowLength / lenLine;
+                double factorO = arrowWidth / lenLine;
 
                 // part in direction of main line
                 double dx = (sx - ex) * factor;
@@ -115,5 +134,17 @@ public class Edge extends Group {
                 ", target=" + target +
                 ", labelText='" + labelText + '\'' +
                 '}';
+    }
+
+    public void highlightColor() {
+        line.setStroke(Color.RED);
+        arrow1.setStroke(Color.RED);
+        arrow2.setStroke(Color.RED);
+    }
+
+    public void resetColor() {
+        line.setStroke(Color.BLACK);
+        arrow1.setStroke(Color.BLACK);
+        arrow2.setStroke(Color.BLACK);
     }
 }

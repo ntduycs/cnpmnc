@@ -1,11 +1,13 @@
 package graph.internal;
 
+import javafx.collections.FXCollections;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import graph.internal.cell.Cell;
 import graph.internal.cell.CellLayer;
+import javafx.scene.shape.Line;
 import javafx.stage.Screen;
 
 public class Graph {
@@ -38,13 +40,15 @@ public class Graph {
         scrollPane = new ZoomableScrollPane(canvas);
 
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        scrollPane.setPrefViewportWidth(visualBounds.getWidth()/2.5);
+        scrollPane.setPrefViewportWidth(visualBounds.getWidth() / 2.5);
 
         scrollPane.setFitToWidth(true);
 
     }
 
-    public ScrollPane getView() {return this.scrollPane;}
+    public ScrollPane getView() {
+        return this.scrollPane;
+    }
 
     public ScrollPane getScrollPane() {
         return this.scrollPane;
@@ -76,6 +80,14 @@ public class Graph {
             mouseGestures.makeDraggable(cell);
         }
 
+        for (Edge edge : model.getAllEdges()) {
+            edge.resetColor();
+        }
+
+        for (Edge edge : model.getHighlightEdges()) {
+            edge.highlightColor();
+        }
+
         // every cell must have a parent, if it doesn't, then the graphParent is
         // the parent
         getModel().attachOrphansToGraphParent(model.getAddedCells());
@@ -85,6 +97,16 @@ public class Graph {
 
         // merge added & removed cells with all cells
         getModel().merge();
+
+        FXCollections.sort(cellLayer.getChildren(), (o1, o2) -> {
+            if (o1 instanceof Edge && !(o2 instanceof Edge)) {
+                return -1;
+            }
+            if (o2 instanceof Edge && !(o1 instanceof Edge)) {
+                return 1;
+            }
+            return 0;
+        });
 
     }
 
