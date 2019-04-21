@@ -51,8 +51,6 @@ public class AdjacencyMatrix implements Observable {
             this.notifyAllObservers(inputValue);
         });
 
-
-
     }
 
 
