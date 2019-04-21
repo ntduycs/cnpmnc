@@ -77,12 +77,10 @@ fabric.properties
 
 # *.iml
 # modules.xml
-# .idea/misc.xml
+.idea/misc.xml
 # *.ipr
 
 # Sonarlint plugin
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/intellij
-
-.idea/misc.xml
