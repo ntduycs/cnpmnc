@@ -48,16 +48,13 @@ public class Graph implements VisitableGraph, Observer {
     }
 
     public void printGraph() {
-        for (Node node :
-                nodes) {
-            System.out.print("This is node: ");
-            System.out.println(node.getName());
-            System.out.print("This is adjacent list: ");
-            for (Node adjNode :
-                    node.getAdjacentNodes().keySet()) {
+        for (Node node: nodes) {
+            System.out.println("Node: " + node.getName());
+            System.out.println("Adj nodes:");
+            for (Node adjNode: node.getAdjacentNodes().keySet()) {
                 System.out.print(adjNode.getName() + "\t");
             }
-            System.out.println("\n=========");
+            System.out.println("===========================");
         }
     }
 
@@ -86,6 +83,10 @@ public class Graph implements VisitableGraph, Observer {
             Node srcNode = getNodeByName(src);
             Node destNode = getNodeByName(dest);
             srcNode.removeAdjacentNode(destNode);
+
+        } else if (data instanceof String) {
+//            printGraph();
+            // TODO
         }
     }
 }

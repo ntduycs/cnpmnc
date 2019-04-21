@@ -61,6 +61,10 @@ public class GraphUI extends graph.internal.Graph implements Observer {
             int src = d.getKey();
             int dest = d.getValue();
             removeEdge(src, dest);
+
+        }  else if (data instanceof String) {
+            // TODO
+            System.out.println("Ahihi");
         }
     }
 }

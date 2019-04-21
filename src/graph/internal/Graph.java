@@ -38,7 +38,7 @@ public class Graph {
         scrollPane = new ZoomableScrollPane(canvas);
 
         Rectangle2D visualBounds = Screen.getPrimary().getVisualBounds();
-        scrollPane.setPrefViewportWidth(visualBounds.getWidth()/2);
+        scrollPane.setPrefViewportWidth(visualBounds.getWidth()/2.5);
 
         scrollPane.setFitToWidth(true);
 

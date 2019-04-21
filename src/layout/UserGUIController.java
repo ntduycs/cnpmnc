@@ -1,45 +1,43 @@
 package layout;
 
-import graph.internal.Graph;
-import graph.internal.GraphState;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import observer.Observable;
-import observer.Observer;
 import util.Triple;
-import visitor.DijkstraVisitor;
 
-import java.util.Random;
+public class UserGUIController implements Observable {
 
-public class AdjacencyMatrix implements Observable {
+    public static final String NOTIFY_RUN_DIJKSTRA = "NOTIFY_RUN_DIJKSTRA";
+    public static final String NOTIFY_RUN_EULER = "NOTIFY_RUN_EULER";
 
-    private TextField inputField = new TextField("Nhập số đỉnh đồ thị");
+    private TextField inputField = new TextField();
     private TextField startVertex = new TextField("Nhập đỉnh bắt đầu");
+    private TextField endVertex = new TextField("Nhập đỉnh bắt đầu");
     private Button generateButton = new Button("Tạo mới");
-    private Button btnDijkstra = new Button("Dijkstra");
-    private Button btnEuler = new Button("Euler");
-    private GridPane gridPane = new GridPane();
+    private Button btnDijkstra = new Button("Chạy Dijkstra");
+    private Button btnEuler = new Button("Chạy Euler");
+    private GridPane tableAdjacencyMatrix = new GridPane();
     private BorderPane root;
 
-    public AdjacencyMatrix() {
+    public UserGUIController() {
 
-        HBox inputForm = new HBox(5, inputField,generateButton, btnDijkstra, btnEuler);
-        inputForm.setPadding(new Insets(5));
+        HBox inputForm = new HBox(8, new Label("Số đỉnh đồ thị: "), inputField,generateButton, btnDijkstra, btnEuler);
+        inputForm.setPadding(new Insets(10));
         inputForm.setAlignment(Pos.CENTER);
-        HBox inputForm2 = new HBox(5, inputField,generateButton, btnDijkstra, btnEuler);
-        inputForm2.setPadding(new Insets(5));
-        inputForm2.setAlignment(Pos.CENTER);
+        inputField.setPrefWidth(50);
 
-        VBox commonForm = new VBox(20, inputForm, inputForm2);
+        VBox matrix = new VBox(8, new Label("Ma trận kề"), tableAdjacencyMatrix);
+        matrix.setPadding(new Insets(10));
 
-        root = new BorderPane(gridPane);
-        root.setBottom(commonForm);
+        root = new BorderPane(matrix);
+        root.setTop(inputForm);
 
         addListeners();
     }
@@ -51,10 +49,19 @@ public class AdjacencyMatrix implements Observable {
             this.notifyAllObservers(inputValue);
         });
 
-
-
+        btnDijkstra.setOnAction(this::handleDijkstra);
+        btnEuler.setOnAction(this::handleEuler);
     }
 
+    private void handleDijkstra(ActionEvent event) {
+        // TODO
+        this.notifyAllObservers(UserGUIController.NOTIFY_RUN_DIJKSTRA);
+    }
+
+    private void handleEuler(ActionEvent event) {
+        // TODO
+        this.notifyAllObservers(UserGUIController.NOTIFY_RUN_EULER);
+    }
 
     private void generateAdjMatrix(int numVertices) {
         int length = numVertices;
@@ -73,9 +80,11 @@ public class AdjacencyMatrix implements Observable {
                 if (x == 0 || y == 0) {
                     tf.setText((x+y)+"");
                     tf.setEditable(false);
+                    tf.setStyle("-fx-control-inner-background: #caed7b");
 
                 } else if (x == y) {
                     tf.setDisable(true);
+                    tf.setStyle("-fx-control-inner-background: #808080");
 
                 } else {
                     tf.setEditable(true);
@@ -85,7 +94,7 @@ public class AdjacencyMatrix implements Observable {
                 // Iterate the Index using the loops
                 GridPane.setRowIndex(tf, y);
                 GridPane.setColumnIndex(tf, x);
-                gridPane.getChildren().add(tf);
+                tableAdjacencyMatrix.getChildren().add(tf);
 
             }
         }
@@ -93,20 +102,19 @@ public class AdjacencyMatrix implements Observable {
 
     private void addListener(TextField tf, final int row, final int col) {
         tf.textProperty().addListener(observable -> {
-
             try {
                 int distance = Integer.valueOf(tf.getText());
-
                 notifyAllObservers(new Triple<>(row, col, distance));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
 
+            } catch (NumberFormatException e) {
                 notifyAllObservers(new Pair<>(row, col));
             }
+
         });
     }
 
     public Node getView() {
         return root;
     }
+
 }

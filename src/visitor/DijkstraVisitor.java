@@ -3,7 +3,8 @@ package visitor;
 import model.Graph;
 import model.Node;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class DijkstraVisitor implements GraphVisitor {
 
