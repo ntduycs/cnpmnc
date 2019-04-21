@@ -106,6 +106,25 @@ public class GraphState {
         addedEdges.add(edge);
     }
 
+    public void removeEdge(String sourceId, String targetId) {
+
+        Cell sourceCell = cellMap.get(sourceId);
+        Cell targetCell = cellMap.get(targetId);
+
+        Edge e = null;
+        for (Edge edge : allEdges) {
+            if (edge.getSource().equals(sourceCell) &&
+                    edge.getTarget().equals(targetCell)) {
+                e = edge;
+                break;
+            }
+        }
+
+        if (e != null) {
+            removedEdges.add(e);
+        }
+    }
+
     /**
      * Attach all cells which don't have a parent to graphParent
      *

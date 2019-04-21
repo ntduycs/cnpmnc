@@ -108,4 +108,12 @@ public class Edge extends Group {
         return target;
     }
 
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "source=" + source +
+                ", target=" + target +
+                ", labelText='" + labelText + '\'' +
+                '}';
+    }
 }

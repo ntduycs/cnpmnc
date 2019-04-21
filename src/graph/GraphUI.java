@@ -1,43 +1,70 @@
 package graph;
 
-import model.Graph;
-import model.Node;
+import graph.internal.Edge;
+import graph.internal.GraphState;
+import graph.internal.RandomLayout;
+import javafx.util.Pair;
 import observer.Observer;
+import util.Triple;
 
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class GraphUI extends graph.internal.Graph implements Observer<Graph> {
+public class GraphUI extends graph.internal.Graph implements Observer {
 
-    Graph graph;
+    private void initializeGraph(int numVertices) {
+        GraphState graphState = getModel();
+        beginUpdate();
+        for (int i = 0; i < numVertices; i++) {
+            graphState.addDefaultNode(Integer.toString(i+1));
+        }
+        endUpdate();
 
-    @Override
-    public void update(Graph data) {
-
-        this.graph = data;
-
-        this.getModel().clear();
-
-        this.beginUpdate();
-
-        initGraph();
-
-        this.endUpdate();
+        randomLayout();
     }
 
-    protected void initGraph() {
-        for (Node node: this.graph.getNodes()) {
-            this.getModel().addDefaultNode(node.getName().toString());
-        }
+    private void randomLayout() {
+        new RandomLayout(this).execute();
+    }
 
-        for (Node node: this.graph.getNodes()) {
+    private void updateEdge(int src, int dest, int distance) {
+        GraphState graphState = getModel();
+        beginUpdate();
 
-            Map<Node, Integer> adj = node.getAdjacentNodes();
+        graphState.removeEdge(src+"", dest+"");
+        graphState.addEdge(src+"", dest+"", distance+"");
 
-            for (Map.Entry<Node, Integer> e: adj.entrySet()) {
-                Node x = e.getKey();
-                Integer distance = e.getValue();
-                this.getModel().addEdge(node.getName().toString(), x.getName().toString(), distance.toString());
-            }
+        endUpdate();
+    }
+
+    private void removeEdge(int src, int dest) {
+        GraphState graphState = getModel();
+        beginUpdate();
+
+        graphState.removeEdge(src+"", dest+"");
+
+        endUpdate();
+    }
+
+
+    @Override
+    public void update(Object data) {
+        if (data instanceof Integer) {
+            int numVertices = (int) data;
+            initializeGraph(numVertices);
+
+        } else if (data instanceof Triple) {
+            Triple<Integer> d = (Triple<Integer>) data;
+            int src = d.x;
+            int dest = d.y;
+            int distance = d.z;
+            updateEdge(src, dest, distance);
+
+        } else if (data instanceof Pair) {
+            Pair<Integer, Integer> d = (Pair<Integer, Integer>) data;
+            int src = d.getKey();
+            int dest = d.getValue();
+            removeEdge(src, dest);
         }
     }
 }
