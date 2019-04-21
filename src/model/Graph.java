@@ -1,5 +1,8 @@
 package model;
 
+import javafx.util.Pair;
+import observer.Observer;
+import util.Triple;
 import visitor.GraphVisitor;
 import visitor.VisitableGraph;
 
@@ -8,7 +11,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class Graph implements VisitableGraph {
+public class Graph implements VisitableGraph, Observer {
     private Set<Node> nodes = new HashSet<>();
 
     public void addNode(Node node) {
@@ -55,6 +58,34 @@ public class Graph implements VisitableGraph {
                 System.out.print(adjNode.getName() + "\t");
             }
             System.out.println("\n=========");
+        }
+    }
+
+    @Override
+    public void update(Object data) {
+        // User inputs the number of vertices
+        if (data instanceof Integer) {
+            int numVertices = (int) data;
+            for (int i = 0; i< numVertices; i++) {
+                nodes.add(new Node(i+1));
+            }
+
+        } else if (data instanceof Triple) {
+            Triple<Integer> d = (Triple<Integer>) data;
+            int src = d.x;
+            int dest = d.y;
+            int distance = d.z;
+            Node srcNode = getNodeByName(src);
+            Node desNode = getNodeByName(dest);
+            srcNode.addAdjacentNode(desNode, distance);
+
+        } else if (data instanceof Pair) {
+            Pair<Integer, Integer> d = (Pair<Integer, Integer>) data;
+            int src = d.getKey();
+            int dest = d.getValue();
+            Node srcNode = getNodeByName(src);
+            Node destNode = getNodeByName(dest);
+            srcNode.removeAdjacentNode(destNode);
         }
     }
 }

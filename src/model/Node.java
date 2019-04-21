@@ -32,6 +32,10 @@ public class Node {
         this.adjacentNodes.put(node, weight);
     }
 
+    public void removeAdjacentNode(Node node) {
+        this.adjacentNodes.remove(node);
+    }
+
     public Integer getName() {
         return name;
     }
