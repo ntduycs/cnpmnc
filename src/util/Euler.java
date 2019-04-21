@@ -4,23 +4,22 @@ import model.Graph;
 import model.Node;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 public class Euler {
     private Graph graph;
+    private Stack<Node> path = null;
 
     public Euler(Graph graph) {
         this.graph = graph;
     }
 
-    private void DFSUtil(Node startVertex, Boolean[] visited) {
+    private void DFSUtil(Node startVertex, boolean[] visited) {
         // Mark the current node as visited
         visited[startVertex.getName()] = true;
-        System.out.print("Current node: " + startVertex.getName() +" -> ");
 
         for (Node adjNode : startVertex.getAdjacentNodes().keySet()) {
-            System.out.println(adjNode.getName());
             if (!visited[adjNode.getName()])
                 DFSUtil(adjNode, visited);
         }
@@ -28,7 +27,8 @@ public class Euler {
 
     private Boolean isStrongConnected() {
         int graphSize = graph.getNodes().size();
-        Boolean[] visited = new Boolean[graphSize];
+
+        boolean[] visited = new boolean[graphSize];
 
         //Do DFS traversal starting from first vertex.
         DFSUtil(graph.getNodeByName(0), visited);
@@ -45,25 +45,32 @@ public class Euler {
 
         Map<Node, Integer> inward = new HashMap<>();
         Map<Node, Integer> outward = new HashMap<>();
-        for (Node node :
-                graph.getNodes()) {
+
+        for (Node node : graph.getNodes()) {
             inward.put(node, 0);
             outward.put(node, 0);
         }
-        int graphSize = graph.getNodes().size();
+
         for (Node node: graph.getNodes()) {
-            int sum = 0;
             for (Node adjNode : node.getAdjacentNodes().keySet()) {
-                inward.put(adjNode, inward.get(adjNode) + 1);
-                sum = sum +1;
+                Integer inDegree = inward.get(adjNode) + 1;
+                inward.put(adjNode, inDegree);
             }
-            outward.put(node, sum);
+            // outward stores the out degree of each vertex
+            outward.put(node, node.getAdjacentNodes().size());
+        }
+        System.out.println("Inward:");
+        for (Map.Entry<Node, Integer> nodeIntegerEntry : inward.entrySet()) {
+            System.out.println( nodeIntegerEntry.getKey().getName() + ":"+nodeIntegerEntry.getValue());
+        }
+        System.out.println("Outward:");
+        for (Map.Entry<Node, Integer> nodeIntegerEntry : outward.entrySet()) {
+            System.out.println( nodeIntegerEntry.getKey().getName() + ":"+nodeIntegerEntry.getValue());
         }
 
-        Iterator iterator = inward.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry ele = (Map.Entry) iterator.next();
-            if (ele.getValue() != outward.get(ele.getKey())) return false;
+            for (Map.Entry<Node, Integer> nodeIntegerEntry : inward.entrySet()) {
+            Node currNode = (Node) ((Map.Entry) nodeIntegerEntry).getKey();
+            if (((Map.Entry) nodeIntegerEntry).getValue() != outward.get(currNode)) return false;
         }
         return true;
     }

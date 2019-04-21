@@ -20,7 +20,6 @@ public class TestEuler {
         graph.getNodeByName(2).addAdjacentNode(graph.getNodeByName(3), 1);
         graph.getNodeByName(3).addAdjacentNode(graph.getNodeByName(0), 1);
 
-        graph.printGraph();
         System.out.println(euler.existEulerCircuit());
     }
 }
