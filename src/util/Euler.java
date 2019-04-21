@@ -17,15 +17,12 @@ public class Euler {
     private void DFSUtil(Node startVertex, Boolean[] visited) {
         // Mark the current node as visited
         visited[startVertex.getName()] = true;
+        System.out.print("Current node: " + startVertex.getName() +" -> ");
 
-        Node node;
-
-        Iterator<Node> adjList =startVertex.getAdjacentNodes().keySet().iterator();
-        while (adjList.hasNext()) {
-            node = adjList.next();
-            System.out.println(node.getName());
-            if (!visited[node.getName()])
-                DFSUtil(node,visited);
+        for (Node adjNode : startVertex.getAdjacentNodes().keySet()) {
+            System.out.println(adjNode.getName());
+            if (!visited[adjNode.getName()])
+                DFSUtil(adjNode, visited);
         }
     }
 

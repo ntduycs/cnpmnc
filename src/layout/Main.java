@@ -42,13 +42,12 @@ public class Main extends Application {
 
         // Show the window
         stage.show();
-<<<<<<< HEAD
-=======
+
     }
 
     private void initObserver() {
         this.matrixModule.attachObserver(graphModule);
->>>>>>> be17c60a4d09e7da33090428f0fcac047cc07db9
+
     }
 
     public static void main(String[] args) {

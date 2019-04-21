@@ -37,12 +37,12 @@ public class Graph {
                 nodes) {
             System.out.print("This is node: ");
             System.out.println(node.getName());
-            System.out.print("");
+            System.out.print("This is adjacent list: ");
             for (Node adjNode :
                     node.getAdjacentNodes().keySet()) {
-                System.out.println(adjNode.getName());
+                System.out.print(adjNode.getName() + "\t");
             }
-            System.out.println("=========");
+            System.out.println("\n=========");
         }
     }
 }
