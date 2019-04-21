@@ -45,7 +45,13 @@ public class TestDijkstra {
         HashMap<Node,Integer> result = visitor.getDistanceTo();
 
         for (Node node: result.keySet()) {
-            System.out.println(node.getName() + " " + result.get(node));
+            System.out.println("Node: " + node.getName() + ": " + result.get(node));
+            Node u = node;
+            while (u != null) {
+                System.out.print(u.getName() + " <- ");
+                u = visitor.getTracingPath().getOrDefault(u, null);
+            }
+            System.out.println("");
         }
 
     }

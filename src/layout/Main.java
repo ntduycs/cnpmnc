@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Graph;
+import observer.Observer;
 
 public class Main extends Application {
 
@@ -50,6 +51,8 @@ public class Main extends Application {
     private void initObserver() {
         this.guiController.attachObserver(graphUI);
         this.guiController.attachObserver(graphData);
+
+        this.graphData.attachObserver(graphUI);
     }
 
     public static void main(String[] args) {

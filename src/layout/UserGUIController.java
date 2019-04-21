@@ -10,28 +10,42 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.util.Pair;
 import observer.Observable;
+import util.BundleDijkstra;
 import util.Triple;
 
-public class UserGUIController implements Observable {
 
-    public static final String NOTIFY_RUN_DIJKSTRA = "NOTIFY_RUN_DIJKSTRA";
+public class UserGUIController extends Observable {
+
     public static final String NOTIFY_RUN_EULER = "NOTIFY_RUN_EULER";
 
     private TextField inputField = new TextField();
-    private TextField startVertex = new TextField("Nhập đỉnh bắt đầu");
-    private TextField endVertex = new TextField("Nhập đỉnh bắt đầu");
+    private TextField startVertex = new TextField();
+    private TextField endVertex = new TextField();
+
     private Button generateButton = new Button("Tạo mới");
     private Button btnDijkstra = new Button("Chạy Dijkstra");
     private Button btnEuler = new Button("Chạy Euler");
+
     private GridPane tableAdjacencyMatrix = new GridPane();
+
     private BorderPane root;
 
     public UserGUIController() {
 
-        HBox inputForm = new HBox(8, new Label("Số đỉnh đồ thị: "), inputField,generateButton, btnDijkstra, btnEuler);
-        inputForm.setPadding(new Insets(10));
-        inputForm.setAlignment(Pos.CENTER);
+
+        HBox row1 = new HBox(8, new Label("Số đỉnh đồ thị: "), inputField, generateButton, btnDijkstra, btnEuler);
+        row1.setPadding(new Insets(10));
+        row1.setAlignment(Pos.CENTER_LEFT);
+
+        HBox row2 = new HBox(8, new Label("Đỉnh bắt đầu: "), startVertex, new Label("Đỉnh kết thúc"), endVertex);
+        row2.setPadding(new Insets(10));
+        row2.setAlignment(Pos.CENTER_LEFT);
+
+        VBox inputForm = new VBox(0, row1, row2);
+
         inputField.setPrefWidth(50);
+        startVertex.setPrefWidth(50);
+        endVertex.setPrefWidth(50);
 
         VBox matrix = new VBox(8, new Label("Ma trận kề"), tableAdjacencyMatrix);
         matrix.setPadding(new Insets(10));
@@ -54,8 +68,7 @@ public class UserGUIController implements Observable {
     }
 
     private void handleDijkstra(ActionEvent event) {
-        // TODO
-        this.notifyAllObservers(UserGUIController.NOTIFY_RUN_DIJKSTRA);
+        this.notifyAllObservers(new BundleDijkstra(startVertex.getText().toString(), endVertex.getText().toString()));
     }
 
     private void handleEuler(ActionEvent event) {
@@ -67,18 +80,18 @@ public class UserGUIController implements Observable {
         int length = numVertices;
         int width = numVertices;
 
-        for(int y = 0; y < length+1; y++){
-            for(int x = 0; x < width+1; x++){
+        for (int y = 0; y < length + 1; y++) {
+            for (int x = 0; x < width + 1; x++) {
 
                 // Create a new TextField in each Iteration
                 TextField tf = new TextField();
-                tf.setPrefHeight(40);
-                tf.setPrefWidth(40);
+                tf.setPrefHeight(32);
+                tf.setPrefWidth(32);
                 tf.setAlignment(Pos.CENTER);
                 tf.setPadding(new Insets(4));
 
                 if (x == 0 || y == 0) {
-                    tf.setText((x+y)+"");
+                    tf.setText((x + y) + "");
                     tf.setEditable(false);
                     tf.setStyle("-fx-control-inner-background: #caed7b");
 

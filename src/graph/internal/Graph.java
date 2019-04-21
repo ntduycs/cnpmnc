@@ -46,6 +46,13 @@ public class Graph {
 
     }
 
+    public void clear() {
+        this.model.clear();
+        canvas.getChildren().clear();
+        cellLayer = new CellLayer();
+        canvas.getChildren().add(cellLayer);
+    }
+
     public ScrollPane getView() {
         return this.scrollPane;
     }
