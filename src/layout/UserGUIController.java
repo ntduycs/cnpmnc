@@ -1,27 +1,26 @@
 package layout;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.*;
-import javafx.util.Duration;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Pair;
-import model.DijkstraResult;
-import model.Graph;
 import observer.Observable;
 import util.AlertError;
 import util.BundleDijkstra;
+import util.BundleEuler;
 import util.Triple;
 
 
 public class UserGUIController extends Observable {
-
-    public static final String NOTIFY_RUN_EULER = "NOTIFY_RUN_EULER";
 
     private TextField numVertices = new TextField();
     private TextField startVertex = new TextField();
@@ -33,6 +32,7 @@ public class UserGUIController extends Observable {
     private Button btnReset = new Button("Quay lại");
 
     private DijkstraResultTable dijkstraResultTable = DijkstraResultTable.getInstance();
+    private EulerResultLabel eulerResultLabel = EulerResultLabel.getInstance();
 
     private GridPane tableAdjacencyMatrix = new GridPane();
     private VBox matrix;
@@ -44,7 +44,8 @@ public class UserGUIController extends Observable {
         startVertex.setTooltip(new Tooltip("Nhập một đỉnh hợp lệ"));
         endVertex.setTooltip(new Tooltip("Nhập một đỉnh hợp lệ"));
 
-        HBox row1 = new HBox(8, new Label("Số đỉnh đồ thị: "), numVertices, generateButton, btnDijkstra, btnEuler, btnReset);
+        HBox row1 = new HBox(8, new Label("Số đỉnh đồ thị: "), numVertices, generateButton,
+                btnDijkstra, btnEuler, btnReset);
         row1.setPadding(new Insets(10));
         row1.setAlignment(Pos.CENTER_LEFT);
 
@@ -62,7 +63,7 @@ public class UserGUIController extends Observable {
         matrix.setPadding(new Insets(10));
         matrix.setVisible(false);
 
-        root = new BorderPane(new VBox(5, matrix, dijkstraResultTable));
+        root = new BorderPane(new VBox(5, matrix, dijkstraResultTable, eulerResultLabel));
         root.setTop(inputForm);
 
         addListeners();
@@ -89,6 +90,7 @@ public class UserGUIController extends Observable {
 
         btnReset.setOnAction(event -> {
             dijkstraResultTable.hide();
+            eulerResultLabel.hide();
         });
     }
 
@@ -106,15 +108,13 @@ public class UserGUIController extends Observable {
 
     private void handleEuler(ActionEvent event) {
         // TODO
-        this.notifyAllObservers(UserGUIController.NOTIFY_RUN_EULER);
+        this.notifyAllObservers(new BundleEuler());
     }
 
     private void generateAdjMatrix(int numVertices) {
-        int length = numVertices;
-        int width = numVertices;
 
-        for (int y = 0; y < length + 1; y++) {
-            for (int x = 0; x < width + 1; x++) {
+        for (int y = 0; y < numVertices + 1; y++) {
+            for (int x = 0; x < numVertices + 1; x++) {
 
                 // Create a new TextField in each Iteration
                 TextField tf = new TextField();

@@ -51,7 +51,7 @@ public class TestDijkstra {
                 System.out.print(u.getName() + " <- ");
                 u = visitor.getTracingPath().getOrDefault(u, null);
             }
-            System.out.println("");
+            System.out.println();
         }
 
     }

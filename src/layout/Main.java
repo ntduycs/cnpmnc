@@ -8,7 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.Graph;
-import observer.Observer;
 
 public class Main extends Application {
 
@@ -18,6 +17,7 @@ public class Main extends Application {
 
     private UserGUIController guiController = new UserGUIController();
     private DijkstraResultTable dijkstraResultTable = DijkstraResultTable.getInstance();
+    private EulerResultLabel eulerResultLabel = EulerResultLabel.getInstance();
 
     // Must override this method for class that extends Application
     @Override
@@ -55,6 +55,7 @@ public class Main extends Application {
 
         this.graphData.attachObserver(graphUI);
         this.graphData.attachObserver(dijkstraResultTable);
+        this.graphData.attachObserver(eulerResultLabel);
     }
 
     public static void main(String[] args) {

@@ -1,14 +1,13 @@
 package graph;
 
 import graph.internal.Edge;
-import graph.internal.Graph;
 import graph.internal.GraphState;
 import graph.internal.RandomLayout;
 import javafx.util.Pair;
-import layout.UserGUIController;
 import model.Node;
 import observer.Observer;
 import util.BundleDijkstra;
+import util.BundleEuler;
 import util.Triple;
 
 import java.util.ArrayList;
@@ -81,12 +80,20 @@ public class GraphUI extends graph.internal.Graph implements Observer {
                 renderResultDijkstra(dt);
             }
 
-        } else if (data instanceof String) {
-            if (((String) data).equalsIgnoreCase(UserGUIController.NOTIFY_RUN_EULER)) {
+        } else if (data instanceof BundleEuler) {
+            BundleEuler dt = (BundleEuler) data;
 
+            if (dt.type.equals(BundleEuler.EXECUTING)) {
+
+            } else if (dt.type.equals(BundleEuler.FINISHED)) {
+                renderResultEuler(dt);
             }
 
         }
+    }
+
+    private void renderResultEuler(BundleEuler result) {
+        // TODO
     }
 
     void renderResultDijkstra(BundleDijkstra result) {

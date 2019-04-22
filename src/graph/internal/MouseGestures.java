@@ -23,7 +23,7 @@ public class MouseGestures {
 
     }
 
-    EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent event) {
@@ -33,12 +33,12 @@ public class MouseGestures {
             double scale = graph.getScale();
 
             dragContext.x = node.getBoundsInParent().getMinX() * scale - event.getScreenX();
-            dragContext.y = node.getBoundsInParent().getMinY()  * scale - event.getScreenY();
+            dragContext.y = node.getBoundsInParent().getMinY() * scale - event.getScreenY();
 
         }
     };
 
-    EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<>() {
 
         @Override
         public void handle(MouseEvent event) {
@@ -59,12 +59,8 @@ public class MouseGestures {
         }
     };
 
-    EventHandler<MouseEvent> onMouseReleasedEventHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> onMouseReleasedEventHandler = event -> {
 
-        @Override
-        public void handle(MouseEvent event) {
-
-        }
     };
 
     class DragContext {

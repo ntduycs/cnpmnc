@@ -1,8 +1,5 @@
 package layout;
 
-import graph.internal.Edge;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -15,6 +12,7 @@ import model.DijkstraResult;
 import model.Graph;
 import model.Node;
 import observer.Observer;
+import util.AlertError;
 import util.BundleDijkstra;
 import visitor.DijkstraVisitor;
 
@@ -82,20 +80,6 @@ public class DijkstraResultTable extends Group implements Observer {
         desCol.setSortType(TableColumn.SortType.ASCENDING);
     }
 
-    public void renderDijkstraResult() {
-        ObservableList<DijkstraResult> dijkstraResults = getDijkstraResult();
-        dijkstraTable.setItems(dijkstraResults);
-    }
-
-    private ObservableList<DijkstraResult> getDijkstraResult() {
-        DijkstraResult row1 = new DijkstraResult(1, 2, 2, "A -> B -> C");
-        DijkstraResult row2 = new DijkstraResult(1, 2, 2, "A -> C -> D -> E -> G");
-        DijkstraResult row3 = new DijkstraResult(1, 2, 2, "A -> E");
-        DijkstraResult row4 = new DijkstraResult(1, 2, 2, "A");
-
-        return FXCollections.observableArrayList(row1, row2, row3, row4);
-    }
-
     @Override
     public void update(Object data) {
         BundleDijkstra dt = (BundleDijkstra) data;
@@ -115,6 +99,7 @@ public class DijkstraResultTable extends Group implements Observer {
 
         if (sourceNode == null) {
             // TODO
+            AlertError.getInstance().show("Đỉnh vừa nhập không tồn tại");
             return;
         }
 

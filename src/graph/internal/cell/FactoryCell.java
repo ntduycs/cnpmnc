@@ -7,16 +7,13 @@ public class FactoryCell {
         switch (type) {
 
             case RECTANGLE:
-                RectangleCell rectangleCell = new RectangleCell(id);
-                return rectangleCell;
+                return new RectangleCell(id);
 
             case TRIANGLE:
-                TriangleCell triangleCell = new TriangleCell(id);
-                return triangleCell;
+                return new TriangleCell(id);
 
             case CIRCLE:
-                CircleCell circleCell = new CircleCell(id);
-                return circleCell;
+                return new CircleCell(id);
 
             default:
                 throw new UnsupportedOperationException("Unsupported type: " + type);

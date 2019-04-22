@@ -44,7 +44,7 @@ public class DijkstraVisitor implements GraphVisitor {
 
     private void runDijkstra() {
 
-        this.priorityQueue = new PriorityQueue<Data>();
+        this.priorityQueue = new PriorityQueue<>();
         this.priorityQueue.add(new Data(this.sourceNode, this.distanceTo.get(this.sourceNode)));
 
         while (!this.priorityQueue.isEmpty()) {

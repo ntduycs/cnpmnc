@@ -7,7 +7,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import graph.internal.cell.Cell;
 import graph.internal.cell.CellLayer;
-import javafx.scene.shape.Line;
 import javafx.stage.Screen;
 
 public class Graph {

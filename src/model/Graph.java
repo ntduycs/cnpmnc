@@ -1,12 +1,13 @@
 package model;
 
 import javafx.util.Pair;
-import layout.UserGUIController;
 import observer.Observable;
 import observer.Observer;
 import util.BundleDijkstra;
+import util.BundleEuler;
 import util.Triple;
 import visitor.DijkstraVisitor;
+import visitor.EulerVisitor;
 import visitor.GraphVisitor;
 import visitor.VisitableGraph;
 
@@ -97,9 +98,12 @@ public class Graph extends Observable implements VisitableGraph, Observer {
 
             }
 
-        } else if (data instanceof String) {
-            if (((String) data).equalsIgnoreCase(UserGUIController.NOTIFY_RUN_EULER)) {
-                this.runEuler();
+        } else if (data instanceof BundleEuler) {
+            BundleEuler dt = (BundleEuler) data;
+            if (dt.type.equals(BundleEuler.EXECUTING)) {
+
+            } else if (dt.type.equals(BundleEuler.FINISHED)){
+                runEuler();
             }
 
         }
@@ -126,6 +130,14 @@ public class Graph extends Observable implements VisitableGraph, Observer {
     }
 
     void runEuler() {
+        EulerVisitor visitor = new EulerVisitor();
+        visitor.visit(this);
 
+        System.out.println(visitor.isEulerianCycle());
+        for (Node node : visitor.getPath()) {
+            System.out.println(node.getName());
+        }
+
+        this.notifyAllObservers(new BundleEuler(BundleEuler.FINISHED, visitor.isEulerianCycle(), this, visitor.getPath()));
     }
 }
