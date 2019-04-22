@@ -101,9 +101,10 @@ public class Graph extends Observable implements VisitableGraph, Observer {
         } else if (data instanceof BundleEuler) {
             BundleEuler dt = (BundleEuler) data;
             if (dt.type.equals(BundleEuler.EXECUTING)) {
+                runEuler();
 
             } else if (dt.type.equals(BundleEuler.FINISHED)){
-                runEuler();
+
             }
 
         }
@@ -135,8 +136,9 @@ public class Graph extends Observable implements VisitableGraph, Observer {
 
         System.out.println(visitor.isEulerianCycle());
         for (Node node : visitor.getPath()) {
-            System.out.println(node.getName());
+            System.out.print(node.getName() + " -> ");
         }
+        System.out.println();
 
         this.notifyAllObservers(new BundleEuler(BundleEuler.FINISHED, visitor.isEulerianCycle(), this, visitor.getPath()));
     }

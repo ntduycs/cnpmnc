@@ -82,15 +82,17 @@ public class DijkstraResultTable extends Group implements Observer {
 
     @Override
     public void update(Object data) {
-        BundleDijkstra dt = (BundleDijkstra) data;
+        if (data instanceof BundleDijkstra) {
 
-        if (dt.type.equals(BundleDijkstra.TYPE_EXECUTE)) {
+            BundleDijkstra dt = (BundleDijkstra) data;
 
-        } else if (dt.type.equals(BundleDijkstra.TYPE_RESULT)) {
-            handleUpdate(dt);
-            this.show();
+            if (dt.type.equals(BundleDijkstra.TYPE_EXECUTE)) {
+
+            } else if (dt.type.equals(BundleDijkstra.TYPE_RESULT)) {
+                handleUpdate(dt);
+                this.show();
+            }
         }
-
     }
 
     private void handleUpdate(BundleDijkstra result) {

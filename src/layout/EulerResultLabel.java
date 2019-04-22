@@ -60,20 +60,22 @@ public class EulerResultLabel extends Group implements Observer {
     }
 
     private void bindTableToGraphModel() {
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("existPath"));
         pathCol.setCellValueFactory(new PropertyValueFactory<>("path"));
     }
 
 
     @Override
     public void update(Object data) {
-        BundleEuler dt = (BundleEuler) data;
+        if (data instanceof BundleEuler) {
+            BundleEuler dt = (BundleEuler) data;
 
-        if (dt.type.equals(BundleEuler.EXECUTING)) {
+            if (dt.type.equals(BundleEuler.EXECUTING)) {
 
-        } else if (dt.type.equals(BundleEuler.FINISHED)) {
-            handleUpdate(dt);
-            this.show();
+            } else if (dt.type.equals(BundleEuler.FINISHED)) {
+                handleUpdate(dt);
+                this.show();
+            }
         }
     }
 
