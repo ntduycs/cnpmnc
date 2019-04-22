@@ -8,7 +8,7 @@ import java.util.PriorityQueue;
 
 public class DijkstraVisitor implements GraphVisitor {
 
-    private final int INF = Integer.MAX_VALUE;
+    public static final int INF = Integer.MAX_VALUE;
 
     Graph graph;
     Node sourceNode;

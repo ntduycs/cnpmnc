@@ -52,9 +52,9 @@ public class Main extends Application {
     private void initObserver() {
         this.guiController.attachObserver(graphUI);
         this.guiController.attachObserver(graphData);
-//        this.guiController.attachObserver(dijkstraResultTable);
 
         this.graphData.attachObserver(graphUI);
+        this.graphData.attachObserver(dijkstraResultTable);
     }
 
     public static void main(String[] args) {
