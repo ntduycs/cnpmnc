@@ -14,6 +14,7 @@ import javafx.util.Pair;
 import model.DijkstraResult;
 import model.Graph;
 import observer.Observable;
+import util.AlertError;
 import util.BundleDijkstra;
 import util.Triple;
 
@@ -31,23 +32,26 @@ public class UserGUIController extends Observable {
     private Button btnEuler = new Button("Chạy Euler");
     private Button btnReset = new Button("Quay lại");
 
-    private TableView<model.DijkstraResult> dijkstraTable = new TableView<>();
-    private TableColumn<model.DijkstraResult, Integer> srcCol = new TableColumn<>("Điểm nguồn");
-    private TableColumn<model.DijkstraResult, Integer> desCol = new TableColumn<>("Điểm đích");
-    private TableColumn<model.DijkstraResult, Integer> minDistance = new TableColumn<>("Khoảng cách ngắn nhất");
-    private TableColumn<model.DijkstraResult, String> path = new TableColumn<>("Đường đi");
+//    private TableView<model.DijkstraResult> dijkstraTable = new TableView<>();
+//    private TableColumn<model.DijkstraResult, Integer> srcCol = new TableColumn<>("Điểm nguồn");
+//    private TableColumn<model.DijkstraResult, Integer> desCol = new TableColumn<>("Điểm đích");
+//    private TableColumn<model.DijkstraResult, Integer> minDistance = new TableColumn<>("Khoảng cách ngắn nhất");
+//    private TableColumn<model.DijkstraResult, String> path = new TableColumn<>("Đường đi");
+
+    private DijkstraResultTable dijkstraResultTable = DijkstraResultTable.getInstance();
 
     private GridPane tableAdjacencyMatrix = new GridPane();
+    private VBox matrix;
 
     // Contains adjacency matrix and Dijkstra's result table
-    private StackPane stackPane = new StackPane();
+//    private StackPane stackPane = new StackPane();
 
     private BorderPane root;
 
     public UserGUIController() {
-        numVertices.setTooltip(new Tooltip("Số đỉnh lớn hơn 20 sẽ làm phần đồ thị bị thu hẹp"));
-        startVertex.setTooltip(new Tooltip("Nếu số đỉnh không hợp lệ thì sao"));
-        endVertex.setTooltip(new Tooltip("Cái ni để làm chi ri @@@@"));
+        numVertices.setTooltip(new Tooltip("Yêu cầu số đỉnh nhỏ hơn 20"));
+        startVertex.setTooltip(new Tooltip("Nhập một đỉnh hợp lệ"));
+        endVertex.setTooltip(new Tooltip("Nhập một đỉnh hợp lệ"));
 
         HBox row1 = new HBox(8, new Label("Số đỉnh đồ thị: "), numVertices, generateButton, btnDijkstra, btnEuler, btnReset);
         row1.setPadding(new Insets(10));
@@ -63,116 +67,94 @@ public class UserGUIController extends Observable {
         startVertex.setPrefWidth(50);
         endVertex.setPrefWidth(50);
 
-        VBox matrix = new VBox(8, new Label("Ma trận kề"), tableAdjacencyMatrix);
+        matrix = new VBox(8, new Label("Ma trận kề"), tableAdjacencyMatrix);
         matrix.setPadding(new Insets(10));
         matrix.setVisible(false);
 
-        bindTableToGraphModel(srcCol, desCol, minDistance, path);
-        renderDijkstraResult(dijkstraTable);
+//        bindTableToGraphModel(srcCol, desCol, minDistance, path);
+//        renderDijkstraResult(dijkstraTable);
+
         //noinspection unchecked
-        dijkstraTable.getColumns().addAll(srcCol, desCol, minDistance, path);
-        dijkstraTable.setEditable(false);
-        VBox table = new VBox(new Label("Kết quả giải thuật Dijkstra"), dijkstraTable);
-        table.setPadding(new Insets(10));
-        table.setVisible(false); // Hidden this table until press Dijkstra button
+//        dijkstraTable.getColumns().addAll(srcCol, desCol, minDistance, path);
+//        dijkstraTable.setEditable(false);
+//        VBox table = new VBox(new Label("Kết quả giải thuật Dijkstra"), dijkstraResultTable);
+//        table.setPadding(new Insets(10));
+//        table.setVisible(false); // Hidden this table until press Dijkstra button
 
-        stackPane.getChildren().addAll(table, matrix);
+//        stackPane.getChildren().addAll(table, matrix);
 
-        root = new BorderPane(stackPane);
+        root = new BorderPane(new VBox(5, matrix, dijkstraResultTable));
         root.setTop(inputForm);
 
         addListeners();
     }
 
     // TODO: move this to other place
-    private void bindTableToGraphModel(TableColumn<model.DijkstraResult, Integer> srcCol,
-                                       TableColumn<model.DijkstraResult, Integer> desCol,
-                                       TableColumn<model.DijkstraResult, Integer> minDistanceCol,
-                                       TableColumn<model.DijkstraResult, String> pathCol) {
-        srcCol.setCellValueFactory(new PropertyValueFactory<>("src"));
-        desCol.setCellValueFactory(new PropertyValueFactory<>("dest"));
-        minDistanceCol.setCellValueFactory(new PropertyValueFactory<>("minDistance"));
-        pathCol.setCellValueFactory(new PropertyValueFactory<>("path"));
-
-        desCol.setSortType(TableColumn.SortType.ASCENDING);
-    }
-
-    // TODO: move this to other place
-    private void renderDijkstraResult(TableView<DijkstraResult> table) {
-        ObservableList<DijkstraResult> dijkstraResults = getDijkstraResult();
-        table.setItems(dijkstraResults);
-    }
+//    private void bindTableToGraphModel(TableColumn<model.DijkstraResult, Integer> srcCol,
+//                                       TableColumn<model.DijkstraResult, Integer> desCol,
+//                                       TableColumn<model.DijkstraResult, Integer> minDistanceCol,
+//                                       TableColumn<model.DijkstraResult, String> pathCol) {
+//        srcCol.setCellValueFactory(new PropertyValueFactory<>("src"));
+//        desCol.setCellValueFactory(new PropertyValueFactory<>("dest"));
+//        minDistanceCol.setCellValueFactory(new PropertyValueFactory<>("minDistance"));
+//        pathCol.setCellValueFactory(new PropertyValueFactory<>("path"));
+//
+//        desCol.setSortType(TableColumn.SortType.ASCENDING);
+//    }
 
     // TODO: move this to other place
-    private ObservableList<DijkstraResult> getDijkstraResult() {
-        DijkstraResult row1 = new DijkstraResult(1,2,2,"A -> B -> C");
-        DijkstraResult row2 = new DijkstraResult(1,2,2,"A -> C -> D -> E -> G");
-        DijkstraResult row3 = new DijkstraResult(1,2,2,"A -> E");
-        DijkstraResult row4 = new DijkstraResult(1,2,2,"A");
+//    private void renderDijkstraResult(TableView<DijkstraResult> table) {
+//        ObservableList<DijkstraResult> dijkstraResults = getDijkstraResult();
+//        table.setItems(dijkstraResults);
+//    }
 
-        return FXCollections.observableArrayList(row1, row2, row3, row4);
+    // TODO: move this to other place
+//    private ObservableList<DijkstraResult> getDijkstraResult() {
+//        DijkstraResult row1 = new DijkstraResult(1,2,2,"A -> B -> C");
+//        DijkstraResult row2 = new DijkstraResult(1,2,2,"A -> C -> D -> E -> G");
+//        DijkstraResult row3 = new DijkstraResult(1,2,2,"A -> E");
+//        DijkstraResult row4 = new DijkstraResult(1,2,2,"A");
+//
+//        return FXCollections.observableArrayList(row1, row2, row3, row4);
+//    }
+
+    private void handleGenerate(ActionEvent ev) {
+        try {
+            int inputValue = Integer.parseInt(numVertices.getText());
+            if (inputValue < 0) {
+                AlertError.getInstance().show("Số đỉnh không hợp lệ");
+            }
+            matrix.setVisible(true);
+            generateAdjMatrix(inputValue);
+            this.notifyAllObservers(inputValue);
+        } catch (NumberFormatException ex) {
+            AlertError.getInstance().show("Số đỉnh không hợp lệ");
+        }
     }
 
     private void addListeners() {
-        generateButton.setOnAction(e -> {
-            // Make the matrix visible
-            ObservableList<Node> children = this.stackPane.getChildren();
-            int numChildren = children.size();
-            children.get(numChildren - 1).setVisible(true);
-
-            // Generate the appropriate matrix based on user's input
-            int inputValue = Integer.parseInt(numVertices.getText());
-            generateAdjMatrix(inputValue);
-            this.notifyAllObservers(inputValue);
-        });
-
-        btnDijkstra.setOnAction(e -> {
-            if (!hasTypedStartVertex()) {
-                showAlertDijkstra();
-            }
-            handleDijkstra(e);
-            showDijkstraTable();
-        });
-
+        generateButton.setOnAction(this::handleGenerate);
+        btnDijkstra.setOnAction(this::handleDijkstra);
         btnEuler.setOnAction(this::handleEuler);
 
-        btnReset.setOnAction(e -> {
-            for (Node element: this.stackPane.getChildren()) {
-                element.setVisible(false);
-            }
-        });
-    }
-
-    private void showAlertDijkstra() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi");
-        alert.setHeaderText("Đã có lỗi xảy ra khi thực hiện giải thuật Dijkstra");
-        alert.setContentText("Đỉnh bắt đầu không được để trống và phải là số");
-        alert.showAndWait();
+//        btnReset.setOnAction(e -> {
+//            for (Node element: this.stackPane.getChildren()) {
+//                element.setVisible(false);
+//            }
+//        });
     }
 
     private boolean hasTypedStartVertex() {
         return startVertex.getText() != null && startVertex.getText().matches("^[0-9]*[1-9][0-9]*$");
     }
 
-    private void handleDijkstra(ActionEvent event) {
-        this.notifyAllObservers(new BundleDijkstra(startVertex.getText(), endVertex.getText()));
-    }
-
-    // TODO: move this to other place
-    private void showDijkstraTable() {
-        ObservableList<Node> children = this.stackPane.getChildren();
-        int numChildren = children.size();
-
-        if (numChildren > 1) {
-            Node currTopElement = children.get(numChildren - 1); // the adjacency matrix
-            Node newTopElement = children.get(numChildren - 2); // the table
-
-            currTopElement.setVisible(false);
-            currTopElement.toBack();
-
-            newTopElement.setVisible(true);
+    private void handleDijkstra(ActionEvent ev) {
+        if (!hasTypedStartVertex()) {
+            AlertError.getInstance().show("Đỉnh bắt đầu không được để trống và phải là số");
+            return;
         }
+        dijkstraResultTable.show();
+        this.notifyAllObservers(new BundleDijkstra(startVertex.getText(), endVertex.getText()));
     }
 
     private void handleEuler(ActionEvent event) {

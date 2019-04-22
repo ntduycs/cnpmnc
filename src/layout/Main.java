@@ -17,6 +17,7 @@ public class Main extends Application {
     private Graph graphData = new Graph();
 
     private UserGUIController guiController = new UserGUIController();
+    private DijkstraResultTable dijkstraResultTable = DijkstraResultTable.getInstance();
 
     // Must override this method for class that extends Application
     @Override
@@ -51,6 +52,7 @@ public class Main extends Application {
     private void initObserver() {
         this.guiController.attachObserver(graphUI);
         this.guiController.attachObserver(graphData);
+//        this.guiController.attachObserver(dijkstraResultTable);
 
         this.graphData.attachObserver(graphUI);
     }
